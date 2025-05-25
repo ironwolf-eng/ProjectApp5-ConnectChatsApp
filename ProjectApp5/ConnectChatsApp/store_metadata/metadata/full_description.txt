@@ -1,0 +1,15 @@
+ConnectChatsApp es una aplicación móvil innovadora que combina la potencia de un sistema de mensajería estilo WhatsApp con las funciones sociales de una red moderna.
+Conéctate con tus amigos, familiares y colegas usando mensajería segura a través de nuestro servidor Openfire propio, bajo el dominio seguro https://www.connectchats.org.
+
+Características principales:
+- 💬 Chats uno a uno y grupales usando XMPP.
+- 🌍 Feed social donde puedes compartir publicaciones, fotos y estados.
+- 🔒 Seguridad avanzada y privacidad garantizada en todos los mensajes.
+- 📱 Compatible con Android, iOS y web.
+- 🚀 Interfaz intuitiva y atractiva, optimizada con animaciones.
+- 📸 Compartir imágenes, videos y notas de voz.
+- 🔔 Notificaciones instantáneas para no perderte nada.
+
+Con ConnectChatsApp tienes el control total: tu red, tus conversaciones, tu espacio seguro.
+
+¡Únete ahora y descubre la nueva forma de comunicarte y socializar!
