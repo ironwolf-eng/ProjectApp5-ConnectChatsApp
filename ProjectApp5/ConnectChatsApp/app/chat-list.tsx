@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, ImageBackground } from 'react-native';
 import { List, Divider } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+// Si necesitas formatear fecha:
+// import { formatTime } from '../src/utils/formatDate';
 
 const mockChats = [
   { id: '1', name: 'Maykel' },
@@ -15,12 +17,15 @@ export default function ChatListScreen() {
   const handleChatPress = (chatId, chatName) => {
     router.push({
       pathname: `/chat/${chatId}`,
-      params: { name: chatName }, // ✅ pasamos también el nombre
+      params: { name: chatName },
     });
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../assets/chat-background.png')} // ✅ pon tu imagen aquí (asegúrate que existe en assets)
+      style={styles.background}
+    >
       <FlatList
         data={mockChats}
         keyExtractor={(item) => item.id}
@@ -31,17 +36,31 @@ export default function ChatListScreen() {
             description="Last message preview"
             onPress={() => handleChatPress(item.id, item.name)}
             left={(props) => <List.Icon {...props} icon="account-circle" />}
+            style={styles.listItem}
           />
         )}
+        contentContainerStyle={styles.listContainer}
       />
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
+    resizeMode: 'cover',
+  },
+  listContainer: {
+    padding: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 10,
+    margin: 10,
+  },
+  listItem: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 8,
+    marginVertical: 4,
   },
 });
-//     flexDirection: 'row',
-//     alignItems: 'center',
+//     padding: 10,
+//     borderRadius: 10,

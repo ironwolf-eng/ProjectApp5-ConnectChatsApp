@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { View, FlatList, StyleSheet, Image } from 'react-native';
+import { FlatList, StyleSheet, Image, View } from 'react-native';
 import { List, Divider, TextInput, Badge } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useChat } from '../src/context/ChatContext';
+import WhatsAppLayout from '../components/WhatsAppLayout';
 
 const mockContacts = [
   { id: '1', name: 'Maykel', isOnline: true, photoUrl: 'https://randomuser.me/api/portraits/men/1.jpg' },
   { id: '2', name: 'Carlos', isOnline: false, photoUrl: 'https://randomuser.me/api/portraits/men/2.jpg' },
   { id: '3', name: 'Ana', isOnline: true, photoUrl: 'https://randomuser.me/api/portraits/women/3.jpg' },
-  { id: '4', name: 'Lucía', isOnline: false, photoUrl: 'https://randomuser.me/api/portraits/women/4.jpg' },
-  { id: '5', name: 'María', isOnline: true, photoUrl: 'https://randomuser.me/api/portraits/women/5.jpg' },
-  { id: '6', name: 'Juan', isOnline: true, photoUrl: 'https://randomuser.me/api/portraits/men/6.jpg' },
 ];
 
 export default function ContactsScreen() {
@@ -31,7 +29,7 @@ export default function ContactsScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <WhatsAppLayout>
       <TextInput
         placeholder="Search contacts..."
         value={searchQuery}
@@ -43,30 +41,37 @@ export default function ContactsScreen() {
         data={filteredContacts}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
+        contentContainerStyle={{ paddingBottom: 80 }}
         renderItem={({ item }) => (
-          <List.Item
-            title={item.name}
-            description={item.isOnline ? 'Online' : 'Offline'}
-            onPress={() => handleStartChat(item)}
-            left={() => (
-              <View style={styles.avatarContainer}>
-                <Image source={{ uri: item.photoUrl }} style={styles.avatar} />
-                <Badge style={[styles.statusBadge, item.isOnline ? styles.online : styles.offline]} />
-              </View>
-            )}
-          />
+          <View style={styles.listItem}>
+            <List.Item
+              title={item.name}
+              description={item.isOnline ? 'Online' : 'Offline'}
+              onPress={() => handleStartChat(item)}
+              left={() => (
+                <View style={styles.avatarContainer}>
+                  <Image source={{ uri: item.photoUrl }} style={styles.avatar} />
+                  <Badge style={[styles.statusBadge, item.isOnline ? styles.online : styles.offline]} />
+                </View>
+              )}
+            />
+          </View>
         )}
       />
-    </View>
+    </WhatsAppLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   searchInput: {
     margin: 10,
+  },
+  listItem: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // menor opacidad
+    borderRadius: 12,
+    marginHorizontal: 10,
+    marginVertical: 5,
+    overflow: 'hidden',
   },
   avatarContainer: {
     position: 'relative',
@@ -94,4 +99,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#BDBDBD',
   },
 });
-// This code defines a ContactsScreen component that displays a list of contacts with their online status and allows users to search for contacts. When a contact is selected, it starts a chat with that contact.
+//     padding: 10,

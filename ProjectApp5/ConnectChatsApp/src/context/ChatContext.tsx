@@ -13,11 +13,12 @@ export const ChatProvider = ({ children }) => {
       isMine,
       timestamp: new Date(),
       status: isMine ? 'sent' : 'delivered',
+      isRead: !isMine, // si es mío, todavía no está leído por el otro
     };
 
     setMessages((prev) => [...prev, newMessage]);
 
-    // Simulación automática de cambio de estado
+    // Simula cambios de estado si es un mensaje propio
     if (isMine) {
       setTimeout(() => updateMessageStatus(newMessage.id, 'delivered'), 2000);
       setTimeout(() => updateMessageStatus(newMessage.id, 'read'), 4000);
@@ -38,9 +39,17 @@ export const ChatProvider = ({ children }) => {
     );
   };
 
+  const unreadCount = messages.filter((msg) => !msg.isRead && !msg.isMine).length;
+
   return (
     <ChatContext.Provider
-      value={{ messages, addMessage, updateMessageStatus, resetUnread }}
+      value={{
+        messages,
+        addMessage,
+        updateMessageStatus,
+        resetUnread,
+        unreadCount,
+      }}
     >
       {children}
     </ChatContext.Provider>
@@ -48,5 +57,3 @@ export const ChatProvider = ({ children }) => {
 };
 
 export const useChat = () => useContext(ChatContext);
-//               styles.message,
-//               { backgroundColor: item.isMine ? '#dcf8c6' : '#fff' },

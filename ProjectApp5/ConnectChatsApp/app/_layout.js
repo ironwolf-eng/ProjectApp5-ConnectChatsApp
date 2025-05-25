@@ -1,33 +1,31 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
-import { Tabs } from 'expo-router';
-import { View, Button as RNButton } from 'react-native';
+import { Stack, Tabs, Slot, useSegments, useRouter } from 'expo-router';
+import { View, StyleSheet, Text } from 'react-native';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import 'react-native-get-random-values';
+import LottieView from 'lottie-react-native';
 
 import { ChatProvider, useChat } from '../src/context/ChatContext';
-import { AuthProvider } from '../src/context/AuthContext';
-import { SettingsProvider, useSettings } from '../src/context/SettingsContext';
+import { AuthProvider, useAuth } from '../src/context/AuthContext';
 
 function TabScreens() {
   const { unreadCount } = useChat();
-  const { theme, setTheme } = useSettings();
+  const [isDark, setIsDark] = useState(false);
 
-  const paperTheme = useMemo(() => {
-    return theme === 'dark' ? MD3DarkTheme : MD3LightTheme;
-  }, [theme]);
+  const theme = useMemo(() => {
+    return isDark ? MD3DarkTheme : MD3LightTheme;
+  }, [isDark]);
 
   return (
-    <PaperProvider theme={paperTheme}>
+    <PaperProvider theme={theme}>
       <Tabs
         screenOptions={{
           headerRight: () => (
             <View style={{ marginRight: 10 }}>
-              <RNButton
-                title={theme === 'dark' ? '🌞 Light' : '🌙 Dark'}
-                onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              />
+              <Text onPress={() => setIsDark((prev) => !prev)}>
+                {isDark ? '🌞' : '🌙'}
+              </Text>
             </View>
           ),
           tabBarActiveTintColor: '#4A148C',
@@ -76,17 +74,71 @@ function TabScreens() {
   );
 }
 
+function MainNavigator() {
+  const segments = useSegments();
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  const isAuthFlow =
+    segments[0] === undefined || segments[0] === 'login' || segments[0] === 'register';
+
+  useEffect(() => {
+    if (!loading && !user && !isAuthFlow) {
+      router.replace('/login');
+    }
+  }, [user, loading, isAuthFlow, router]);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <LottieView
+          source={require('../assets/loading-animation.json')}
+          autoPlay
+          loop
+          style={styles.lottie}
+        />
+        <Text style={styles.loadingText}>Loading user data...</Text>
+      </View>
+    );
+  }
+
+  return isAuthFlow ? (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Slot />
+    </Stack>
+  ) : (
+    <TabScreens />
+  );
+}
+
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <SettingsProvider>
-        <AuthProvider>
-          <ChatProvider>
-            <TabScreens />
-          </ChatProvider>
-        </AuthProvider>
-      </SettingsProvider>
+      <AuthProvider>
+        <ChatProvider>
+          <MainNavigator />
+        </ChatProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }
-// import { useRouter } from 'expo-router';
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  lottie: {
+    width: 150,
+    height: 150,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#4A148C',
+  },
+});
+// This file is part of the Expo Router documentation.
+// It is not intended to be run as a standalone script.

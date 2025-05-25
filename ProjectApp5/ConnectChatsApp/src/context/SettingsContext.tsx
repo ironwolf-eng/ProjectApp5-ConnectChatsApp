@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import * as Localization from 'expo-localization';
 
-
 const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
@@ -30,11 +29,9 @@ export const SettingsProvider = ({ children }) => {
       const storedLanguage = await AsyncStorage.getItem('@language');
       if (storedLanguage) {
         setLanguage(storedLanguage);
-        i18n.locale = storedLanguage;
       } else {
         const deviceLanguage = Localization.locale.split('-')[0]; // 'es' or 'en'
         setLanguage(deviceLanguage);
-        i18n.locale = deviceLanguage;
         await AsyncStorage.setItem('@language', deviceLanguage);
       }
 
@@ -60,7 +57,6 @@ export const SettingsProvider = ({ children }) => {
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    i18n.locale = lang;
   };
 
   const registerForPushNotificationsAsync = async () => {
@@ -88,5 +84,3 @@ export const SettingsProvider = ({ children }) => {
 };
 
 export const useSettings = () => useContext(SettingsContext);
-// This custom hook provides a simple interface for managing app settings, including notifications, language, and theme.
-// It uses AsyncStorage to persist settings across app restarts and Expo Notifications for push notifications.

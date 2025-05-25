@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Switch } from 'react-native';
+import { View, StyleSheet, Switch, ImageBackground } from 'react-native';
 import { List, Divider, Button, Text } from 'react-native-paper';
-import { useTranslation } from '../src/hooks/useTranslation';
 import { useSettings } from '../src/context/SettingsContext';
 
 export default function SettingsScreen() {
-  const { t } = useTranslation();
   const {
     notificationsEnabled,
     setNotificationsEnabled,
@@ -20,55 +18,65 @@ export default function SettingsScreen() {
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>{t('settings')}</Text>
-      <List.Section>
-        <List.Subheader>{t('preferences')}</List.Subheader>
+    <ImageBackground
+      source={require('../assets/chat-background.png')} // ✅ usa aquí tu imagen real (ajusta el nombre)
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.header}>Settings</Text>
+        <List.Section>
+          <List.Subheader>Preferences</List.Subheader>
 
-        <List.Item
-          title={t('notifications')}
-          description={notificationsEnabled ? t('enabled') : t('disabled')}
-          right={() => (
-            <Switch value={notificationsEnabled} onValueChange={toggleNotifications} />
-          )}
-        />
+          <List.Item
+            title="Notifications"
+            description={notificationsEnabled ? 'Enabled' : 'Disabled'}
+            right={() => (
+              <Switch value={notificationsEnabled} onValueChange={toggleNotifications} />
+            )}
+          />
 
-        <Divider />
+          <Divider />
 
-        <List.Item
-          title={t('language')}
-          description={language === 'es' ? 'Español' : 'English'}
-          right={() => (
-            <Button onPress={toggleLanguage} compact>
-              {t('change')}
-            </Button>
-          )}
-        />
+          <List.Item
+            title="Language"
+            description={language === 'es' ? 'Español' : 'English'}
+            right={() => (
+              <Button onPress={toggleLanguage} compact>
+                Change
+              </Button>
+            )}
+          />
 
-        <Divider />
+          <Divider />
 
-        <List.Item
-          title={t('theme')}
-          description={theme === 'light' ? t('light') : t('dark')}
-          right={() => (
-            <Button onPress={toggleTheme} compact>
-              {t('switch')}
-            </Button>
-          )}
-        />
-      </List.Section>
+          <List.Item
+            title="Theme"
+            description={theme === 'light' ? 'Light' : 'Dark'}
+            right={() => (
+              <Button onPress={toggleTheme} compact>
+                Switch
+              </Button>
+            )}
+          />
+        </List.Section>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{t('currentLanguage')}: {language.toUpperCase()}</Text>
-        <Text style={styles.footerText}>{t('currentTheme')}: {theme}</Text>
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Current Language: {language.toUpperCase()}</Text>
+          <Text style={styles.footerText}>Current Theme: {theme}</Text>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // semi-transparente para mejor lectura
     padding: 16,
   },
   header: {
@@ -86,3 +94,4 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
 });
+//     color: 'gray',

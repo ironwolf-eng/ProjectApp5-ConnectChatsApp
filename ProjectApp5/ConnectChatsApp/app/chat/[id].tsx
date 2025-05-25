@@ -3,7 +3,6 @@ import { View, FlatList, TextInput, StyleSheet, KeyboardAvoidingView, Platform, 
 import { Button } from 'react-native-paper';
 import { useLocalSearchParams } from 'expo-router';
 import { useChat } from '../../src/context/ChatContext';
-import moment from 'moment';
 
 export default function ChatScreen() {
   const { id, name } = useLocalSearchParams();
@@ -65,7 +64,10 @@ export default function ChatScreen() {
             <Text style={styles.messageText}>{item.body}</Text>
             <View style={styles.metaRow}>
               <Text style={styles.timeText}>
-                {moment(item.timestamp).format('HH:mm')}
+                {new Intl.DateTimeFormat('es-ES', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                }).format(new Date(item.timestamp))}
               </Text>
               {item.isMine && (
                 <Text style={styles.statusText}>{renderStatus(item.status)}</Text>
@@ -146,5 +148,3 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
-//   },
-//   },
