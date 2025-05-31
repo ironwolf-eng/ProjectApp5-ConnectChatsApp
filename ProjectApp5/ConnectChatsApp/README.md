@@ -23,10 +23,6 @@
 
 ---
 
-## 🌐 Conexión al servidor
-
-- Servidor XMPP (Openfire): `wss://www.connectchats.org:7443/ws/`
-- Dominio: `connectchats.org`
 
 ---
 
